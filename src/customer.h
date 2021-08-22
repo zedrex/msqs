@@ -12,6 +12,9 @@ class Customer
     // Departure time by simulation clock
     double departure_time;
 
+    // Server that served this customer
+    int server_index;
+
     // Serial based on arrival time by simulation clock
     int serial;
 
@@ -37,6 +40,10 @@ public:
     double GetArrivalTime();
     double GetServiceStartTime();
     double GetDepartureTime();
+
+    void SetServer(int server_index);
+
+    int GetServer();
 
     // Returns the total number of customer so far (whole simulation)
     static int GetTotalCustomers();

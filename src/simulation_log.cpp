@@ -6,8 +6,10 @@
 #include "server.h"
 #include <iostream>
 
-SimulationLog::SimulationLog()
+SimulationLog::SimulationLog(int total_servers)
 {
+    this->total_servers = total_servers;
+
     this->total_simulation_time = 0;
     this->total_customers = 0;
     this->total_queue_length = 0;
@@ -22,9 +24,9 @@ SimulationLog::SimulationLog()
     this->server_utilization_percentage = 0;
 }
 
-void SimulationLog::CreateEventRecord(std::string event_type, double time, int customer_serial, int queue_size)
+void SimulationLog::CreateEventRecord(std::string event_type, double time, int customer_serial, int queue_size, int server_index)
 {
-    EventRecord current_event = EventRecord(event_type, time, customer_serial, queue_size);
+    EventRecord current_event = EventRecord(event_type, time, customer_serial, queue_size, server_index);
     this->event_records.push_back(current_event);
 }
 
@@ -82,29 +84,29 @@ void SimulationLog::CreateStatisticalData()
 
 std::string SimulationLog::GetEventRecords()
 {
-    std::string event_record_csv = "Type,Start Time,Customer,Queue Size\n";
+    std::string event_record_csv = "Type,Start Time,Server,Customer,Queue Size\n";
     for (EventRecord event_record : this->event_records)
     {
-        event_record_csv += event_record.event_type + "," + std::to_string(event_record.current_simulation_time) + "," + std::to_string(event_record.customer_serial) + "," + std::to_string(event_record.current_queue_size) + "\n";
+        event_record_csv += event_record.event_type + "," + std::to_string(event_record.current_simulation_time) + "," + ((event_record.server_index == -1) ? "-" : std::to_string(event_record.server_index + 1)) + "," + std::to_string(event_record.customer_serial) + "," + std::to_string(event_record.current_queue_size) + "\n";
     }
     return event_record_csv;
 }
 
 std::string SimulationLog::GetCustomerRecords()
 {
-    std::string customer_record_csv = "Customer,Arrival Interval,Arrival Time,Service Start Time,Departure Time,Queue Delay Duration,Service Duration,Sojourn Time\n";
+    std::string customer_record_csv = "Customer,Server,Arrival Time,Service Start Time,Departure Time,Service Duration,Sojourn Time\n";
     for (CustomerRecord customer_record : this->customer_records)
     {
-        customer_record_csv += std::to_string(customer_record.serial) + "," + std::to_string(customer_record.arrival_time_gap) + "," + std::to_string(customer_record.arrival_time) + "," + std::to_string(customer_record.service_start_time) + "," + std::to_string(customer_record.departure_time) + "," + std::to_string(customer_record.queue_delay_time) + "," + std::to_string(customer_record.service_time) + "," + std::to_string(customer_record.service_time + customer_record.queue_delay_time) + "\n";
+        customer_record_csv += std::to_string(customer_record.serial) + "," + std::to_string(customer_record.server_index + 1) + "," + std::to_string(customer_record.arrival_time) + "," + std::to_string(customer_record.service_start_time) + "," + std::to_string(customer_record.departure_time) + "," + std::to_string(customer_record.service_time) + "," + std::to_string(customer_record.service_time + customer_record.queue_delay_time) + "\n";
     }
     return customer_record_csv;
 }
 
 std::string SimulationLog::GetSimulationStatistics()
 {
-    std::string simulation_statistics_csv = "Total Customers,Total Simulation Time,Average Inter Arrival Time,Average Service Time,Average Queue Delay,Average Queue Length,Server Utilization\n";
+    std::string simulation_statistics_csv = "Total Customers,Total Servers, Total Simulation Time,Average Inter Arrival Time,Average Service Time,Average Queue Delay,Average Queue Length,Server Utilization\n";
 
-    simulation_statistics_csv += std::to_string(this->total_customers) + "," + std::to_string(this->total_simulation_time) + "," + std::to_string(this->average_inter_arrival_time) + "," + std::to_string(this->average_service_time) + "," + std::to_string(this->average_queue_delay) + "," + std::to_string(this->average_queue_length) + "," + std::to_string(this->server_utilization_percentage) + "%" + "\n";
+    simulation_statistics_csv += std::to_string(this->total_customers) + "," + std::to_string(this->total_servers) + "," + std::to_string(this->total_simulation_time) + "," + std::to_string(this->average_inter_arrival_time) + "," + std::to_string(this->average_service_time) + "," + std::to_string(this->average_queue_delay) + "," + std::to_string(this->average_queue_length) + "," + std::to_string(this->server_utilization_percentage) + "%" + "\n";
 
     return simulation_statistics_csv;
 }

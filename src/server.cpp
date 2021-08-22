@@ -1,4 +1,5 @@
 #include "server.h"
+#include "customer.h"
 
 int Server::total_servers = 0;
 
@@ -16,4 +17,14 @@ ServerStatus Server::GetServerStatus()
 void Server::SetServerStatus(ServerStatus status)
 {
     this->status = status;
+}
+
+void Server::SetCurrentCustomer(Customer customer)
+{
+    this->current_customer = customer;
+}
+
+Customer Server::GetCurrentCustomer()
+{
+    return this->current_customer;
 }

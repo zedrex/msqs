@@ -10,6 +10,7 @@ CustomerRecord::CustomerRecord(Customer customer)
     this->arrival_time = customer.GetArrivalTime();
     this->service_start_time = customer.GetServiceStartTime();
     this->departure_time = customer.GetDepartureTime();
+    this->server_index = customer.GetServer();
 
     this->queue_delay_time = this->service_start_time - this->arrival_time;
     this->service_time = this->departure_time - this->service_start_time;

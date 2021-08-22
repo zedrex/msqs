@@ -9,7 +9,6 @@
 #include "server.h"
 #include "simulation_log.h"
 #include "exponential_random_number.h"
-#include <vector>
 
 class Simulation
 {
@@ -22,14 +21,11 @@ class Simulation
     // Server status (IDLE | BUSY)
     std::vector<Server> servers;
 
-    // Reference to the currently served customer
-    Customer currently_served_customer;
-
     // Customer queue waiting for service
     std::queue<Customer> service_queue;
 
     // Minimum heap that keeps the Events sorted on their invoke time
-    std::priority_queue<Event, std::vector<Event *>, Compare> event_queue;
+    std::priority_queue<Event, std::vector<Event>, Compare> event_queue;
 
     //Average of  inter-arrival time of customers
     double inter_arrival_time_mean;
@@ -66,22 +62,22 @@ public:
     void HandleArrival();
 
     // Handles the departure of a customer from the system
-    void HandleDeparture(Server *target_server);
+    void HandleDeparture(int target_server_index);
 
     // Creates logs for arrival event for a new customer
     void CreateArrivalLog(Customer customer);
 
     // Creates logs for service event
-    void CreateServiceLog();
+    void CreateServiceLog(int server_index);
 
     // Creates logs for departure event
-    void CreateDepartureLog();
+    void CreateDepartureLog(int server_index);
 
     // Access Simulation Log
     SimulationLog *GetSimulationLog();
 
-    // Check first available server
-    Server *GetAvailableServer();
+    // Find first available server
+    int GetAvailableServerIndex();
 };
 
 #endif

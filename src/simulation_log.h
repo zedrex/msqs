@@ -15,6 +15,8 @@ private:
     std::vector<EventRecord> event_records;
     std::vector<CustomerRecord> customer_records;
 
+    int total_servers;
+
     double total_simulation_time;
     double total_customers;
     double total_queue_length;
@@ -29,10 +31,10 @@ private:
     double server_utilization_percentage;
 
 public:
-    SimulationLog();
+    SimulationLog(int total_servers);
 
     // Create a record for a given event
-    void CreateEventRecord(std::string event_type, double time, int customer_serial, int queue_size);
+    void CreateEventRecord(std::string event_type, double time, int customer_serial, int queue_size, int server_index);
 
     // Create a record for a given customer
     void CreateCustomerRecord(Customer customer);

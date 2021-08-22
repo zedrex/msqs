@@ -44,3 +44,13 @@ double Customer::GetDepartureTime()
 {
     return this->departure_time;
 }
+
+void Customer::SetServer(int server_index)
+{
+    this->server_index = server_index;
+}
+
+int Customer::GetServer()
+{
+    return this->server_index;
+}

@@ -22,6 +22,9 @@ class CustomerRecord
     // Service time
     double service_time;
 
+    // Server that served this customer
+    int server_index;
+
 public:
     CustomerRecord();
     CustomerRecord(Customer customer);
